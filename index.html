@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alhena Ghaniya | Photobooth Portfolio</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #fff9f5;
+    --blush: #f7a8c4;
+    --rose: #b5677d;
+    --lavender: #d4a9e8;
+    --film: #2b2622;
+    --paper: #fffefb;
+  }
+
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: var(--cream);
+    color: #4a3b3b;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .sprockets {
+    position: fixed;
+    top: 0;
+    width: 28px;
+    height: 100%;
+    background: var(--film);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px 0;
+  }
+  .sprockets.left { left: 0; }
+  .sprockets.right { right: 0; }
+  .sprockets span {
+    width: 12px;
+    height: 12px;
+    background: var(--cream);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  body { padding: 0 40px; }
+
+  header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  nav { display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; }
+  nav a {
+    color: var(--rose);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  nav a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 0%; height: 2px;
+    background: var(--blush);
+    transition: width 0.3s ease;
+  }
+  nav a:hover::after { width: 100%; }
+
+  section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 70px 20px;
+  }
+
+  .booth {
+    text-align: center;
+    padding-top: 40px;
+  }
+  .booth-frame {
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 24px;
+    border-radius: 20px;
+    background: linear-gradient(160deg, #3a332e, #1f1b18);
+    position: relative;
+    box-shadow: 0 20px 40px rgba(181,103,125,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .booth-lens {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #8a6b78, #2b2622 70%);
+    border: 6px solid var(--blush);
+    position: relative;
+    overflow: hidden;
+  }
+  .booth-lens img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .booth-flash {
+    position: absolute;
+    top: 18px; right: 18px;
+    width: 20px; height: 20px;
+    background: var(--blush);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--blush);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  .booth h1 {
+    font-size: 40px;
+    color: var(--rose);
+    margin-bottom: 8px;
+  }
+  .booth .tagline {
+    color: #7a6262;
+    font-size: 17px;
+    margin-bottom: 26px;
+  }
+  .snap-btn {
+    display: inline-block;
+    background: var(--blush);
+    color: #fff;
+    border: none;
+    padding: 14px 34px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .snap-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 16px var(--blush), 0 0 30px var(--lavender);
+  }
+
+  #flashOverlay {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+  }
+  #flashOverlay.flash {
+    animation: flashPop 0.5s ease;
+  }
+  @keyframes flashPop {
+    0% { opacity: 0; }
+    15% { opacity: 0.95; }
+    100% { opacity: 0; }
+  }
+
+  h2 {
+    font-size: 26px;
+    color: var(--rose);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2::before, h2::after {
+    content: "✿";
+    color: var(--blush);
+    font-size: 16px;
+  }
+
+  .about-strip {
+    background: var(--paper);
+    border: 1px solid #f0d9e0;
+    border-radius: 12px;
+    padding: 26px 30px;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(181,103,125,0.08);
+  }
+  .about-strip::before {
+    content: "";
+    position: absolute;
+    top: -10px; left: 30px;
+    width: 60px; height: 22px;
+    background: rgba(247,168,196,0.55);
+    transform: rotate(-4deg);
+  }
+
+  .filmstrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+  }
+  .polaroid {
+    background: var(--paper);
+    padding: 14px 14px 20px;
+    width: 240px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    transform: rotate(var(--tilt, -2deg));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  .polaroid:nth-child(2n) { --tilt: 2deg; }
+  .polaroid:nth-child(3n) { --tilt: -1.5deg; }
+  .polaroid:hover {
+    transform: rotate(0deg) translateY(-8px);
+    box-shadow: 0 18px 30px rgba(181,103,125,0.25);
+  }
+  .polaroid .snap {
+    height: 150px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--lavender), var(--blush));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin-bottom: 12px;
+  }
+  .polaroid h3 {
+    font-size: 15px;
+    color: #4a3b3b;
+    margin-bottom: 6px;
+  }
+  .polaroid p {
+    font-size: 12.5px;
+    color: #7a6262;
+    margin-bottom: 10px;
+  }
+  .polaroid a {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--rose);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rose);
+  }
+  .polaroid .tape {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 50px; height: 18px;
+    background: rgba(212,169,232,0.6);
+  }
+
+  .case-study {
+    background: var(--paper);
+    border: 1px solid #f0d9e0;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 10px 24px rgba(181,103,125,0.1);
+  }
+  .case-study-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .case-study-header img.logo-mark {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    background: var(--film);
+    border-radius: 14px;
+    padding: 8px;
+  }
+  .case-study-header h3 {
+    font-size: 20px;
+    color: var(--rose);
+    margin-bottom: 4px;
+  }
+  .case-study-header .role-tag {
+    display: inline-block;
+    background: #fbe4ec;
+    color: var(--rose);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 12px;
+  }
+  .case-study p.blurb {
+    color: #7a6262;
+    font-size: 14px;
+    margin: 16px 0 22px;
+    max-width: 620px;
+  }
+  .case-study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  .case-study-grid figure {
+    margin: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #f0d9e0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .case-study-grid figure:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 24px rgba(181,103,125,0.2);
+  }
+  .case-study-grid img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    background: #f4f4f4;
+    display: block;
+  }
+  .case-study-grid figcaption {
+    font-size: 11px;
+    color: #4a3b3b;
+    text-align: center;
+    padding: 8px 6px;
+  }
+
+  .gallery-sheet {
+    background: var(--film);
+    border-radius: 10px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+  }
+  .gallery-sheet figure {
+    margin: 0;
+    background: #fff;
+    padding: 10px 10px 14px;
+    border-radius: 6px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .gallery-sheet figure:hover {
+    transform: scale(1.05) rotate(-1deg);
+    box-shadow: 0 10px 20px rgba(247,168,196,0.4);
+    z-index: 2;
+    position: relative;
+  }
+  .gallery-sheet img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    background: #f4f4f4;
+    border-radius: 2px;
+    display: block;
+  }
+  .gallery-sheet figcaption {
+    font-size: 10.5px;
+    color: #4a3b3b;
+    text-align: center;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .contact-sheet {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .frame-chip {
+    background: var(--film);
+    color: var(--cream);
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    position: relative;
+    border: 2px solid var(--blush);
+  }
+
+  .receipt {
+    background: var(--paper);
+    border: 1px dashed var(--rose);
+    border-radius: 6px;
+    padding: 24px 26px;
+    max-width: 500px;
+  }
+  .receipt .entry { margin-bottom: 18px; }
+  .receipt .entry:last-child { margin-bottom: 0; }
+  .receipt .entry h3 { font-size: 15px; color: var(--rose); }
+  .receipt .entry p { font-size: 13px; color: #7a6262; }
+
+  .contact-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .contact-links a {
+    background: #fff;
+    border: 2px solid var(--blush);
+    color: var(--rose);
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+    transition: all 0.25s ease;
+  }
+  .contact-links a:hover {
+    background: var(--blush);
+    color: #fff;
+    box-shadow: 0 0 14px var(--blush);
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 20px 60px;
+    font-size: 12px;
+    color: #b090a0;
+    letter-spacing: 1px;
+  }
+
+  section { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  section.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="sprockets left">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+<div class="sprockets right">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<div id="flashOverlay"></div>
+
+<header>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#design">Design</a>
+    <a href="#skills">Skills</a>
+    <a href="#education">Education</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section id="home" class="booth">
+  <div class="booth-frame">
+    <div class="booth-lens">
+      <img src="images/profile.jpg" alt="Alhena Ghaniya" onerror="this.style.display='none'">
+    </div>
+    <div class="booth-flash"></div>
+  </div>
+  <h1>Hi, I'm Alhena Ghaniya 🧸</h1>
+  <p class="tagline">step into the booth, here's everything I've been building</p>
+  <button class="snap-btn" onclick="takeSnap()">📸 Say cheese</button>
+</section>
+
+<section id="about">
+  <h2>About</h2>
+  <div class="about-strip">
+    <p>I'm an MSc Artificial Intelligence student at Ulster University, originally from Bahrain and now based in Belfast. I enjoy working on problems where technology meets human experience — my current research looks at how machines can pick up on emotion through speech and text. When I'm not coding, I'm usually reading, sketching out design ideas, or learning a new language through dramas.</p>
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="filmstrip">
+    <div class="polaroid">
+      <div class="tape"></div>
+      <div class="snap">🎧</div>
+      <h3>Multimodal Emotion Recognition</h3>
+      <p>BiLSTM/CNN for speech + fine-tuned BERT for text — my MSc dissertation, built for healthcare chatbots.</p>
+      <a href="#">View on GitHub</a>
+    </div>
+    <div class="polaroid">
+      <div class="tape"></div>
+      <div class="snap">🤖</div>
+      <h3>Bug 2 Robot Navigation</h3>
+      <p>Autonomous path-planning with ROS Noetic + Gazebo, full lifecycle from design to simulation.</p>
+      <a href="#">View on GitHub</a>
+    </div>
+    <div class="polaroid">
+      <div class="tape"></div>
+      <div class="snap">🧩</div>
+      <h3>Q-Learning Grid World</h3>
+      <p>A reinforcement learning agent navigating a 5x5 grid, with visualised learning progress.</p>
+      <a href="#">View on GitHub</a>
+    </div>
+    <div class="polaroid">
+      <div class="tape"></div>
+      <div class="snap">🩺</div>
+      <h3>Stroke Prediction Model</h3>
+      <p>scikit-learn model predicting stroke risk — led data cleaning across the group project.</p>
+      <a href="#">View on GitHub</a>
+    </div>
+    <div class="polaroid">
+      <div class="tape"></div>
+      <div class="snap">💍</div>
+      <h3>WEDEASE</h3>
+      <p>A Flutter + Python wedding planning app to simplify event coordination and vendors.</p>
+      <a href="#">View on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<section id="design">
+  <h2>Design &amp; Branding</h2>
+
+  <div class="case-study">
+    <div class="case-study-header">
+      <img src="images/eprayan/logo-mark-clean.png" class="logo-mark" alt="EPRAYAN logo mark" style="object-fit: contain; background: var(--film);">
+      <div>
+        <h3>EPRAYAN 2024–25 — Full Brand Identity</h3>
+        <span class="role-tag">Logo · Branding · Event Coordination</span>
+      </div>
+    </div>
+    <p class="blurb">Led the complete A–Z branding for EPRAYAN, our intercollegiate IT fest — designing the logo mark, event poster series, coordinator cards, sponsor collateral, and certificates, alongside coordinating the event itself as Student Coordinator.</p>
+    <div class="case-study-grid">
+      <figure>
+        <img src="images/eprayan/logo-mark-clean.png" alt="EPRAYAN logo mark" style="background: var(--film); object-fit: contain;">
+        <figcaption>Logo Mark</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eprayan/hero-banner.png" alt="EPRAYAN hero banner with countdown and QR code">
+        <figcaption>Hero Banner + QR</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eprayan/event-series.png" alt="Full EPRAYAN event poster series grid">
+        <figcaption>Event Poster Series (8 events)</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eprayan/coordinators.png" alt="EPRAYAN coordinator ID cards">
+        <figcaption>Coordinator Cards</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eprayan/sponsors.png" alt="EPRAYAN sponsor thank-you page">
+        <figcaption>Sponsor Collateral</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eprayan/rules.png" alt="EPRAYAN rules and regulations graphic">
+        <figcaption>Rules &amp; Regulations</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eprayan/certificate-winner.png" alt="EPRAYAN winner certificate design">
+        <figcaption>Certificate of Appreciation</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eprayan/certificate-participation.png" alt="EPRAYAN participation certificate design">
+        <figcaption>Certificate of Participation</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <p style="margin: 30px 0 20px; color: #7a6262; font-size: 14px;">A few standout event posters from the series:</p>
+  <div class="gallery-sheet" style="margin-bottom: 30px;">
+    <figure>
+      <img src="images/eprayan/guide-to-murder.png" alt="Squid Game themed event poster">
+      <figcaption>Squid Game — Survive the Game</figcaption>
+    </figure>
+    <figure>
+      <img src="images/eprayan/hackathon.png" alt="Stranger Strings hackathon poster">
+      <figcaption>Stranger Strings — Hackathon</figcaption>
+    </figure>
+    <figure>
+      <img src="images/eprayan/quiz.png" alt="Techflix Trivia quiz poster">
+      <figcaption>Techflix Trivia</figcaption>
+    </figure>
+    <figure>
+      <img src="images/eprayan/ai-battle.png" alt="Gambit of AI event poster">
+      <figcaption>Gambit of AI</figcaption>
+    </figure>
+  </div>
+
+  <p style="margin: 30px 0 20px; color: #7a6262; font-size: 14px;">More posters, event branding, and course materials I've designed:</p>
+  <div class="gallery-sheet">
+    <figure>
+      <img src="images/design/falite.png" alt="Fálite fresher's event poster">
+      <figcaption>Fálite — Fresher's Event</figcaption>
+    </figure>
+    <figure>
+      <img src="images/design/farewell.jpg" alt="Farewell party poster">
+      <figcaption>Jab We Met — Farewell Party</figcaption>
+    </figure>
+    <figure>
+      <img src="images/design/fansfest.jpg" alt="Fans Fest World Cup poster">
+      <figcaption>Fans Fest — FIFA World Cup</figcaption>
+    </figure>
+    <figure>
+      <img src="images/design/computer-literacy.jpg" alt="World Computer Literacy Day poster">
+      <figcaption>World Computer Literacy Day</figcaption>
+    </figure>
+    <figure>
+      <img src="images/design/iot-course.png" alt="Internet of Things certificate course poster">
+      <figcaption>IoT Certificate Course</figcaption>
+    </figure>
+    <figure>
+      <img src="images/design/cybersecurity-course.png" alt="Cybersecurity and Ethical Hacking course poster">
+      <figcaption>Cybersecurity &amp; Ethical Hacking</figcaption>
+    </figure>
+    <figure>
+      <img src="images/design/dca-course.jpg" alt="Diploma in Computer Application poster">
+      <figcaption>DCA — Diploma Course</figcaption>
+    </figure>
+    <figure>
+      <img src="images/design/ai-future.jpg" alt="AI future themed poster">
+      <figcaption>This Is The Future</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="skills">
+  <h2>Skills</h2>
+  <div class="contact-sheet">
+    <span class="frame-chip">Python</span>
+    <span class="frame-chip">Java</span>
+    <span class="frame-chip">HTML</span>
+    <span class="frame-chip">CSS</span>
+    <span class="frame-chip">Flutter</span>
+    <span class="frame-chip">scikit-learn</span>
+    <span class="frame-chip">Keras</span>
+    <span class="frame-chip">ROS / Gazebo</span>
+    <span class="frame-chip">Figma</span>
+    <span class="frame-chip">Adobe XD</span>
+    <span class="frame-chip">Git</span>
+  </div>
+</section>
+
+<section id="education">
+  <h2>Education</h2>
+  <div class="receipt">
+    <div class="entry">
+      <h3>MSc Artificial Intelligence</h3>
+      <p>Ulster University, Belfast — Graduating September 2026</p>
+    </div>
+    <div class="entry">
+      <h3>BSc Computer Science</h3>
+      <p>Providence Women's College, Calicut, India</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Contact</h2>
+  <p>Feel free to reach out, I'd love to hear from you.</p>
+  <div class="contact-links">
+    <a href="mailto:alhenaghaniyah@gmail.com.com">✉ Email</a>
+    <a href="www.linkedin.com/in/alhena-ghaniya-sameer-04a1672b0">LinkedIn</a>
+    <a href="https://github.com/Alhenaghaniya">GitHub</a>
+  </div>
+</section>
+
+<footer>developed &amp; printed with love ˚⊹ · roll no. 001</footer>
+
+<script>
+  function takeSnap() {
+    const overlay = document.getElementById('flashOverlay');
+    overlay.classList.remove('flash');
+    void overlay.offsetWidth; // restart animation
+    overlay.classList.add('flash');
+    document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
